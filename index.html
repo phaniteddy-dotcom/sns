@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sister Nivedita School Elections 2026 - Dashboard</title>
+    <!-- Tailwind CSS for modern, clean styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 text-slate-800">
+
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- HEADER CANVAS WITH SCHOOL LOGO -->
+        <header class="relative bg-gradient-to-r from-cyan-800 to-teal-700 text-white rounded-2xl p-6 md:p-8 shadow-lg overflow-hidden border-b-4 border-amber-500">
+            <div class="absolute top-0 left-0 w-full h-2 bg-amber-400"></div>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
+                <!-- School Logo -->
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEJNty998XdQbHC8R9YbtqFfTnoTFfmZ-UBs1XmEBNpZ458f-0o2IJDOxf&s=10" 
+                     alt="Sister Nivedita School Logo" 
+                     class="w-20 h-20 md:w-24 md:h-24 object-contain bg-white p-2 rounded-full shadow-md border-2 border-amber-400">
+                
+                <div class="text-center md:text-left">
+                    <p class="text-xs uppercase tracking-widest text-teal-200 font-semibold mb-1">For Your Child's Bright Future</p>
+                    <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight drop-shadow-sm">
+                        SISTER NIVEDITA SCHOOL ELECTIONS 2026
+                    </h1>
+                    <p class="mt-1 text-sm md:text-base text-teal-100 italic">"Participate. Lead. Inspire."</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- TOP GRID: CELEBRATIONS & LIVE RESULTS TALLY -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- CONGRATULATIONS PANEL (Elected Executive Leaders) -->
+            <div class="bg-gradient-to-b from-amber-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-amber-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-3xl animate-bounce">🎉</span>
+                        <h2 class="text-xl font-bold text-amber-900">Congratulations!</h2>
+                    </div>
+                    <p class="text-xs text-amber-800/80 mb-6 font-medium">Proudly announcing our newly elected apex student leadership representatives for the 2026 academic year:</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Head Boy Card -->
+                        <div class="bg-white/85 backdrop-blur p-4 rounded-xl border border-amber-200 shadow-xs flex items-center gap-4">
+                            <span class="text-3xl">👑</span>
+                            <div>
+                                <span class="block text-[10px] font-bold text-amber-700 uppercase tracking-wider">Head Boy</span>
+                                <span class="text-lg font-bold text-slate-900 tracking-tight">Mujtaba</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Head Girl Card -->
+                        <div class="bg-white/85 backdrop-blur p-4 rounded-xl border border-amber-200 shadow-xs flex items-center gap-4">
+                            <span class="text-3xl">👑</span>
+                            <div>
+                                <span class="block text-[10px] font-bold text-amber-700 uppercase tracking-wider">Head Girl</span>
+                                <span class="text-lg font-bold text-slate-900 tracking-tight">Riddhi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-3 bg-amber-600/10 rounded-lg text-center border border-amber-600/20">
+                    <p class="text-xs font-semibold text-amber-900">Let us rally behind our leaders to inspire change!</p>
+                </div>
+            </div>
+
+            <!-- LIVE DEPUTY ELECTIONS VOTING TALLY BOARD -->
+            <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">📊</span>
+                        <h2 class="text-xl font-bold text-slate-900">Live Vote Counter & Tally</h2>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider animate-pulse">
+                        Live Tracking
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Deputy Head Boy Section -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b pb-1">Deputy Head Boy</h3>
+                        
+                        <!-- Dhruv Tadka -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-medium text-slate-700">Dhruv Tadka</span>
+                                <span id="votes-dhruv" class="font-mono font-bold text-cyan-700">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                                <div id="bar-dhruv" class="bg-cyan-600 h-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <button onclick="addVote('dhruv')" class="w-full py-1 px-2 mt-1 bg-cyan-50 hover:bg-cyan-100 border border-cyan-200 text-cyan-700 text-[11px] font-medium rounded-md transition-colors">
+                                +1 Vote
+                            </button>
+                        </div>
+
+                        <!-- Srijan -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-medium text-slate-700">Srijan</span>
+                                <span id="votes-srijan" class="font-mono font-bold text-teal-700">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                                <div id="bar-srijan" class="bg-teal-600 h-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <button onclick="addVote('srijan')" class="w-full py-1 px-2 mt-1 bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-700 text-[11px] font-medium rounded-md transition-colors">
+                                +1 Vote
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Deputy Head Girl Section -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b pb-1">Deputy Head Girl</h3>
+                        
+                        <!-- Sanvi G -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-medium text-slate-700">Sanvi G</span>
+                                <span id="votes-sanvi" class="font-mono font-bold text-fuchsia-700">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                                <div id="bar-sanvi" class="bg-fuchsia-600 h-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <button onclick="addVote('sanvi')" class="w-full py-1 px-2 mt-1 bg-fuchsia-50 hover:bg-fuchsia-100 border border-fuchsia-200 text-fuchsia-700 text-[11px] font-medium rounded-md transition-colors">
+                                +1 Vote
+                            </button>
+                        </div>
+
+                        <!-- Sravya -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-medium text-slate-700">Sravya</span>
+                                <span id="votes-sravya" class="font-mono font-bold text-rose-700">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                                <div id="bar-sravya" class="bg-rose-600 h-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <button onclick="addVote('sravya')" class="w-full py-1 px-2 mt-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-[11px] font-medium rounded-md transition-colors">
+                                +1 Vote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end pt-2">
+                    <button onclick="resetVotes()" class="text-slate-400 hover:text-rose-600 text-xs flex items-center gap-1 transition-colors">
+                        🔄 Reset Voting Tally Board
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TWO-COLUMN INTERACTIVE INTERFACE (Schedule & Counters) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- LEFT COLUMN: SCHEDULE & CHECKLIST -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📅</span>
+                            <h2 class="text-xl font-bold text-slate-900">Election Schedule & Live Tracker</h2>
+                        </div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-200">
+                            July 2026
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-500 mb-4">Click on any timeline milestone to toggle its completion status manually:</p>
+
+                    <!-- Interactive Timeline Checklist -->
+                    <div class="relative border-l-2 border-teal-200 ml-4 space-y-6 my-4">
+                        
+                        <!-- Milestone 1 -->
+                        <div class="relative pl-6 cursor-pointer group" onclick="toggleTimeline(this)">
+                            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-teal-600 border-4 border-white shadow transition-all duration-200 timeline-dot"></div>
+                            <div class="p-4 bg-slate-50 group-hover:bg-slate-100 rounded-xl border border-slate-200/60 transition-all timeline-card">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                                    <span class="text-xs font-bold text-teal-700 uppercase tracking-wider">01/07/2026 • Wednesday</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-medium w-max status-badge">Active Today</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">Head Boy & Head Girl Announcements</h3>
+                                <p class="text-xs text-slate-600 mt-1">Final contestants list for Deputy Head Boy & Deputy Head Girl released.</p>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 2 -->
+                        <div class="relative pl-6 cursor-pointer group" onclick="toggleTimeline(this)">
+                            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-teal-600 border-4 border-white shadow transition-all duration-200 timeline-dot"></div>
+                            <div class="p-4 bg-slate-50 group-hover:bg-slate-100 rounded-xl border border-slate-200/60 transition-all timeline-card">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                                    <span class="text-xs font-bold text-teal-700 uppercase tracking-wider">01/07/2026 • Wednesday</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-medium w-max status-badge">Active Today</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">Submission of Logos</h3>
+                                <p class="text-xs text-slate-600 mt-1">All contestants must submit their official campaign logos.</p>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 3 -->
+                        <div class="relative pl-6 cursor-pointer group" onclick="toggleTimeline(this)">
+                            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-slate-300 border-4 border-white shadow transition-all duration-200 timeline-dot"></div>
+                            <div class="p-4 bg-slate-50 group-hover:bg-slate-100 rounded-xl border border-slate-200/60 transition-all timeline-card">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">02/07/2026 • Thursday</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge">Upcoming</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">Campaigning & Assembly Speeches</h3>
+                                <p class="text-xs text-slate-600 mt-1 font-medium">Candidates deliver key speeches during morning assembly.</p>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 4 -->
+                        <div class="relative pl-6 cursor-pointer group" onclick="toggleTimeline(this)">
+                            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-slate-300 border-4 border-white shadow transition-all duration-200 timeline-dot"></div>
+                            <div class="p-4 bg-slate-50 group-hover:bg-slate-100 rounded-xl border border-slate-200/60 transition-all timeline-card">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">03/07/2026 • Friday</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge">Upcoming</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">Deputy Head Boy & Girl Elections</h3>
+                                <p class="text-xs text-slate-600 mt-1">Official balloting window open for the executive deputy positions.</p>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 5 -->
+                        <div class="relative pl-6 cursor-pointer group" onclick="toggleTimeline(this)">
+                            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-slate-300 border-4 border-white shadow transition-all duration-200 timeline-dot"></div>
+                            <div class="p-4 bg-slate-50 group-hover:bg-slate-100 rounded-xl border border-slate-200/60 transition-all timeline-card">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">04/07/2026 • Saturday</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge">Upcoming</span>
+                                </div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">House Wise Elections</h3>
+                                <p class="text-xs text-slate-600 mt-1">Final voting day organized by individual school houses.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: INTERACTIVE BALLOT REGISTRATION SIMULATOR -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🗳️</span>
+                        <h2 class="text-xl font-bold text-slate-900">Live Polling Simulator</h2>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4">Simulate checking in students at the registration counters below to see real-time desk counts.</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Table 1 Box -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-slate-800">Registration Table 1</h4>
+                                    <p class="text-[11px] text-slate-500">Staff: Mrs. Sirisha & Mr. Reddy</p>
+                                </div>
+                                <span id="t1-count" class="text-xs font-mono font-bold bg-teal-100 text-teal-800 px-2 py-1 rounded">0 Processed</span>
+                            </div>
+                            <button onclick="checkIn('t1')" class="w-full mt-2 bg-teal-700 hover:bg-teal-800 text-white text-xs font-medium py-2 px-3 rounded-lg transition-colors shadow-sm">
+                                Check In Student
+                            </button>
+                        </div>
+
+                        <!-- Table 2 Box -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-slate-800">Registration Table 2</h4>
+                                    <p class="text-[11px] text-slate-500">Staff: Mrs. Hanna & Mr. Sitaram</p>
+                                </div>
+                                <span id="t2-count" class="text-xs font-mono font-bold bg-indigo-100 text-indigo-800 px-2 py-1 rounded">0 Processed</span>
+                            </div>
+                            <button onclick="checkIn('t2')" class="w-full mt-2 bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-medium py-2 px-3 rounded-lg transition-colors shadow-sm">
+                                Check In Student
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Total Bar Display -->
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>Total Simulated Turnout</span>
+                            <span id="total-voters">0 Students</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2">
+                            <div id="voter-bar" class="bg-gradient-to-r from-teal-600 to-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FULL WIDTH: SEARCHABLE OFFICIAL COMMITTEE DIRECTORY -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🏛️</span>
+                    <h2 class="text-xl font-bold text-slate-900">Official Election Committee Directory</h2>
+                </div>
+                <!-- Search Input Field -->
+                <input type="text" id="directorySearch" onkeyup="searchDirectory()" placeholder="Filter members or roles..." 
+                       class="px-4 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600 max-w-xs w-full">
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <table class="w-full text-left border-collapse" id="committeeTable">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-200">
+                            <th class="py-3.5 px-4 font-semibold">Committee / Team</th>
+                            <th class="py-3.5 px-4 font-semibold">Assigned Officials / Scope</th>
+                            <th class="py-3.5 px-4 font-semibold">Operational Mandate</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-xs md:text-sm">
+                        <tr>
+                            <td class="py-4 px-4 font-medium text-slate-900">Executive Leadership</td>
+                            <td class="py-4 px-4">
+                                <span class="block font-semibold text-teal-900">Mrs. Y Suneetha</span>
+                                <span class="text-[11px] text-slate-500">Chief Election Commissioner</span>
+                            </td>
+                            <td class="py-4 px-4 text-slate-600">Overall regulatory oversight and definitive electoral execution strategy.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 font-medium text-slate-900">Executive Leadership</td>
+                            <td class="py-4 px-4">
+                                <span class="block font-semibold text-teal-900">Mrs. Satya Nagasri</span>
+                                <span class="text-[11px] text-slate-500">Deputy Election Commissioner</span>
+                            </td>
+                            <td class="py-4 px-4 text-slate-600">Assisting executive management and overseeing operational transparency protocols.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 font-medium text-slate-900">Polling Administration</td>
+                            <td class="py-4 px-4">
+                                <span class="block font-semibold text-slate-800">Mrs. T Jyothi</span>
+                                <span class="text-[11px] text-slate-500">Polling Station In-charge</span>
+                            </td>
+                            <td class="py-4 px-4 text-slate-600">Managing logistics, spatial structure, and assisting student voters at physical booths.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 font-medium text-slate-900">Voter Registration Team</td>
+                            <td class="py-4 px-4">
+                                <div class="space-y-1">
+                                    <div><strong class="text-slate-700">Table 1:</strong> Mrs. Sirisha & Mr. Reddy</div>
+                                    <div><strong class="text-slate-700">Table 2:</strong> Mrs. Hanna & Mr. Sitaram</div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4 text-slate-600">Verifying identification credentials, managing rosters, and processing physical voting access.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 font-medium text-slate-900">Vote Counting Committee</td>
+                            <td class="py-4 px-4 text-slate-800 font-medium">
+                                Mrs. Sudha Rani, Mrs. Geetha R, Mrs. Lakshmi P, Mrs. Prateeba
+                            </td>
+                            <td class="py-4 px-4 text-slate-600">Secure tallying of ballots, checking margins, and confirming output precision.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 font-medium text-slate-900">Discipline & Decorum Committee</td>
+                            <td class="py-4 px-4">
+                                <span class="block text-slate-800 font-medium">Mrs. Vedha R, Ms. Lavanya, Mr. Koteswara Rao</span>
+                                <span class="text-[11px] text-teal-700 font-semibold uppercase tracking-wider">With NCC Team</span>
+                            </td>
+                            <td class="py-4 px-4 text-slate-600">Ensuring decorum code compliance, queue structures, and securing overall site integrity.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT FOR INTERACTIVE MODULE FUNCTIONS -->
+    <script>
+        // Milestone Checklist Toggle
+        function toggleTimeline(element) {
+            const dot = element.querySelector('.timeline-dot');
+            const card = element.querySelector('.timeline-card');
+            const badge = element.querySelector('.status-badge');
+            
+            if (card.classList.contains('bg-emerald-50/60')) {
+                // Revert back to unchecked styling
+                card.classList.remove('bg-emerald-50/60', 'border-emerald-200');
+                card.classList.add('bg-slate-50', 'border-slate-200/60');
+                dot.classList.remove('bg-emerald-600');
+                dot.classList.add('bg-teal-600');
+                if(badge.innerText === 'Completed') {
+                    badge.innerText = 'Upcoming';
+                    badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge";
+                }
+            } else {
+                // Set to checked/completed styling
+                card.classList.remove('bg-slate-50', 'border-slate-200/60');
+                card.classList.add('bg-emerald-50/60', 'border-emerald-200');
+                dot.classList.remove('bg-teal-600', 'bg-slate-300');
+                dot.classList.add('bg-emerald-600');
+                badge.innerText = 'Completed';
+                badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-medium w-max status-badge";
+            }
+        }
+
+        // Live Registration Voter Counter Logic
+        let counts = { t1: 0, t2: 0 };
+        const maximumSimulatedCap = 150; // Visual progress anchor
+
+        function checkIn(tableKey) {
+            counts[tableKey]++;
+            document.getElementById(`${tableKey}-count`).innerText = `${counts[tableKey]} Processed`;
+            
+            let flexTotal = counts.t1 + counts.t2;
+            document.getElementById('total-voters').innerText = `${flexTotal} Student${flexTotal > 1 ? 's' : ''}`;
+            
+            // Calculate fill percentage safely
+            let visualPercentage = Math.min((flexTotal / maximumSimulatedCap) * 100, 100);
+            document.getElementById('voter-bar').style.width = `${visualPercentage}%`;
+        }
+
+        // Live Voting Results Logic
+        let votes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
+
+        function addVote(candidateKey) {
+            votes[candidateKey]++;
+            document.getElementById(`votes-${candidateKey}`).innerText = `${votes[candidateKey]} vote${votes[candidateKey] !== 1 ? 's' : ''}`;
+            updateProgressBars();
+        }
+
+        function updateProgressBars() {
+            // Deputy Head Boy calculations
+            let totalBoyVotes = votes.dhruv + votes.srijan;
+            if (totalBoyVotes > 0) {
+                document.getElementById('bar-dhruv').style.width = `${(votes.dhruv / totalBoyVotes) * 100}%`;
+                document.getElementById('bar-srijan').style.width = `${(votes.srijan / totalBoyVotes) * 100}%`;
+            } else {
+                document.getElementById('bar-dhruv').style.width = '0%';
+                document.getElementById('bar-srijan').style.width = '0%';
+            }
+
+            // Deputy Head Girl calculations
+            let totalGirlVotes = votes.sanvi + votes.sravya;
+            if (totalGirlVotes > 0) {
+                document.getElementById('bar-sanvi').style.width = `${(votes.sanvi / totalGirlVotes) * 100}%`;
+                document.getElementById('bar-sravya').style.width = `${(votes.sravya / totalGirlVotes) * 100}%`;
+            } else {
+                document.getElementById('bar-sanvi').style.width = '0%';
+                document.getElementById('bar-sravya').style.width = '0%';
+            }
+        }
+
+        function resetVotes() {
+            votes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
+            for (let key in votes) {
+                document.getElementById(`votes-${key}`).innerText = `0 votes`;
+            }
+            updateProgressBars();
+        }
+
+        // Live Table Directory Search Filter
+        function searchDirectory() {
+            let input = document.getElementById("directorySearch");
+            let filter = input.value.toUpperCase();
+            let table = document.getElementById("committeeTable");
+            let tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let showRow = false;
+                let tds = tr[i].getElementsByTagName("td");
+                
+                for(let j = 0; j < tds.length; j++) {
+                    if (tds[j]) {
+                        let txtValue = tds[j].textContent || tds[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            showRow = true;
+                            break;
+                        }
+                    }
+                }
+                tr[i].style.display = showRow ? "" : "none";
+            }
+        }
+    </script>
+<!-- ... Your existing HTML layouts, tables, and buttons are up here ... -->
+
+    <!-- PASTE THE CODE HERE -->
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  // 1. YOUR FIREBASE CONFIGURATION (Paste yours here)
+ const firebaseConfig = {
+  apiKey: "YOUR_ACTUAL_API_KEY",
+  authDomain: "your-project.firebaseapp.com",
+  databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "..."
+  appId: "..."
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // References to our data paths in the cloud
+  const votesRef = ref(db, 'election/votes');
+  const countsRef = ref(db, 'election/counts');
+
+  // Local state cache variables
+  let localVotes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
+  let localCounts = { t1: 0, t2: 0 };
+  const maximumSimulatedCap = 150;
+
+  // 2. LISTEN FOR LIVE CHANGES FROM THE CLOUD
+  // Whenever the database updates (on any device), this updates everyone's UI instantly.
+  onValue(votesRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      localVotes = data;
+      for (let key in localVotes) {
+        const element = document.getElementById(`votes-${key}`);
+        if (element) element.innerText = `${localVotes[key]} vote${localVotes[key] !== 1 ? 's' : ''}`;
+      }
+      updateProgressBars();
+    }
+  });
+
+  onValue(countsRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      localCounts = data;
+      document.getElementById('t1-count').innerText = `${localCounts.t1 || 0} Processed`;
+      document.getElementById('t2-count').innerText = `${localCounts.t2 || 0} Processed`;
+      
+      let flexTotal = (localCounts.t1 || 0) + (localCounts.t2 || 0);
+      document.getElementById('total-voters').innerText = `${flexTotal} Student${flexTotal > 1 ? 's' : ''}`;
+      
+      let visualPercentage = Math.min((flexTotal / maximumSimulatedCap) * 100, 100);
+      document.getElementById('voter-bar').style.width = `${visualPercentage}%`;
+    }
+  });
+
+  // 3. PUSH ACTIONS TO CLOUD DATABASE ON CLICK
+  // Expose local click triggers safely to HTML window context
+  window.addVote = function(candidateKey) {
+    localVotes[candidateKey] = (localVotes[candidateKey] || 0) + 1;
+    set(votesRef, localVotes); // Save directly to cloud
+  }
+
+  window.checkIn = function(tableKey) {
+    localCounts[tableKey] = (localCounts[tableKey] || 0) + 1;
+    set(countsRef, localCounts); // Save directly to cloud
+  }
+
+  window.resetVotes = function() {
+    if (confirm("Are you sure you want to reset all official tally boards?")) {
+      const freshVotes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
+      const freshCounts = { t1: 0, t2: 0 };
+      set(votesRef, freshVotes);
+      set(countsRef, freshCounts);
+    }
+  }
+
+  // UI rendering helper calculation functions
+  function updateProgressBars() {
+    let totalBoyVotes = (localVotes.dhruv || 0) + (localVotes.srijan || 0);
+    document.getElementById('bar-dhruv').style.width = totalBoyVotes > 0 ? `${((localVotes.dhruv || 0) / totalBoyVotes) * 100}%` : '0%';
+    document.getElementById('bar-srijan').style.width = totalBoyVotes > 0 ? `${((localVotes.srijan || 0) / totalBoyVotes) * 100}%` : '0%';
+
+    let totalGirlVotes = (localVotes.sanvi || 0) + (localVotes.sravya || 0);
+    document.getElementById('bar-sanvi').style.width = totalGirlVotes > 0 ? `${((localVotes.sanvi || 0) / totalGirlVotes) * 100}%` : '0%';
+    document.getElementById('bar-sravya').style.width = totalGirlVotes > 0 ? `${((localVotes.sravya || 0) / totalGirlVotes) * 100}%` : '0%';
+  }
+
+  // Keep search timeline functional locally
+  window.searchDirectory = function() {
+    let input = document.getElementById("directorySearch");
+    let filter = input.value.toUpperCase();
+    let table = document.getElementById("committeeTable");
+    let tr = table.getElementsByTagName("tr");
+    for (let i = 1; i < tr.length; i++) {
+        let showRow = false;
+        let tds = tr[i].getElementsByTagName("td");
+        for(let j = 0; j < tds.length; j++) {
+            if (tds[j]) {
+                let txtValue = tds[j].textContent || tds[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) { showRow = true; break; }
+            }
+        }
+        tr[i].style.display = showRow ? "" : "none";
+    }
+  }
+
+  window.toggleTimeline = function(element) {
+    const dot = element.querySelector('.timeline-dot');
+    const card = element.querySelector('.timeline-card');
+    const badge = element.querySelector('.status-badge');
+    if (card.classList.contains('bg-emerald-50/60')) {
+        card.classList.remove('bg-emerald-50/60', 'border-emerald-200');
+        card.classList.add('bg-slate-50', 'border-slate-200/60');
+        dot.classList.remove('bg-emerald-600'); dot.classList.add('bg-teal-600');
+        if(badge.innerText === 'Completed') {
+            badge.innerText = 'Upcoming';
+            badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge";
+        }
+    } else {
+        card.classList.remove('bg-slate-50', 'border-slate-200/60');
+        card.classList.add('bg-emerald-50/60', 'border-emerald-200');
+        dot.classList.remove('bg-teal-600', 'bg-slate-300'); dot.classList.add('bg-emerald-600');
+        badge.innerText = 'Completed';
+        badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-medium w-max status-badge";
+    }
+  }
+</script>
+</body>
+</html></body>
+</html>
