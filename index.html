@@ -385,246 +385,132 @@
 
     </div>
 
-    <!-- JAVASCRIPT FOR INTERACTIVE MODULE FUNCTIONS -->
-    <script>
-        // Milestone Checklist Toggle
-        function toggleTimeline(element) {
-            const dot = element.querySelector('.timeline-dot');
-            const card = element.querySelector('.timeline-card');
-            const badge = element.querySelector('.status-badge');
-            
-            if (card.classList.contains('bg-emerald-50/60')) {
-                // Revert back to unchecked styling
-                card.classList.remove('bg-emerald-50/60', 'border-emerald-200');
-                card.classList.add('bg-slate-50', 'border-slate-200/60');
-                dot.classList.remove('bg-emerald-600');
-                dot.classList.add('bg-teal-600');
-                if(badge.innerText === 'Completed') {
-                    badge.innerText = 'Upcoming';
-                    badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge";
+    <!-- JAVASCRIPT FOR INTERACTIVE MODULE FUNCTIONS & CLOUD REALTIME SYNC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your exact verified active project configurations
+        const firebaseConfig = {
+            apiKey: "AIzaSyDx3siJ7Q1YZXZub9n0FwvUsE-QK5yUCwg",
+            authDomain: "elections-sns.firebaseapp.com",
+            databaseURL: "https://elections-sns-default-rtdb.firebaseio.com",
+            projectId: "elections-sns",
+            storageBucket: "elections-sns.firebasestorage.app",
+            messagingSenderId: "18712332570",
+            appId: "1:18712332570:web:24117ebe7b8f11eca6c4a3",
+            measurementId: "G-82EVFVVL73"
+        };
+
+        // Initialize Firebase database connection instance
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Define precise paths in the cloud json structure
+        const votesRef = ref(db, 'election/votes');
+        const countsRef = ref(db, 'election/counts');
+
+        // Local functional variables
+        let localVotes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
+        let localCounts = { t1: 0, t2: 0 };
+        const maximumSimulatedCap = 150;
+
+        // Listen live for modifications from external data devices
+        onValue(votesRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                localVotes = data;
+                for (let key in localVotes) {
+                    const element = document.getElementById(`votes-${key}`);
+                    if (element) element.innerText = `${localVotes[key]} vote${localVotes[key] !== 1 ? 's' : ''}`;
                 }
-            } else {
-                // Set to checked/completed styling
-                card.classList.remove('bg-slate-50', 'border-slate-200/60');
-                card.classList.add('bg-emerald-50/60', 'border-emerald-200');
-                dot.classList.remove('bg-teal-600', 'bg-slate-300');
-                dot.classList.add('bg-emerald-600');
-                badge.innerText = 'Completed';
-                badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-medium w-max status-badge";
+                updateProgressBars();
             }
+        });
+
+        onValue(countsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                localCounts = data;
+                document.getElementById('t1-count').innerText = `${localCounts.t1 || 0} Processed`;
+                document.getElementById('t2-count').innerText = `${localCounts.t2 || 0} Processed`;
+                
+                let flexTotal = (localCounts.t1 || 0) + (localCounts.t2 || 0);
+                document.getElementById('total-voters').innerText = `${flexTotal} Student${flexTotal > 1 ? 's' : ''}`;
+                
+                let visualPercentage = Math.min((flexTotal / maximumSimulatedCap) * 100, 100);
+                document.getElementById('voter-bar').style.width = `${visualPercentage}%`;
+            }
+        });
+
+        // Globally linked browser context operational functions
+        window.addVote = function(candidateKey) {
+            localVotes[candidateKey] = (localVotes[candidateKey] || 0) + 1;
+            set(votesRef, localVotes);
         }
 
-        // Live Registration Voter Counter Logic
-        let counts = { t1: 0, t2: 0 };
-        const maximumSimulatedCap = 150; // Visual progress anchor
-
-        function checkIn(tableKey) {
-            counts[tableKey]++;
-            document.getElementById(`${tableKey}-count`).innerText = `${counts[tableKey]} Processed`;
-            
-            let flexTotal = counts.t1 + counts.t2;
-            document.getElementById('total-voters').innerText = `${flexTotal} Student${flexTotal > 1 ? 's' : ''}`;
-            
-            // Calculate fill percentage safely
-            let visualPercentage = Math.min((flexTotal / maximumSimulatedCap) * 100, 100);
-            document.getElementById('voter-bar').style.width = `${visualPercentage}%`;
+        window.checkIn = function(tableKey) {
+            localCounts[tableKey] = (localCounts[tableKey] || 0) + 1;
+            set(countsRef, localCounts);
         }
 
-        // Live Voting Results Logic
-        let votes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
-
-        function addVote(candidateKey) {
-            votes[candidateKey]++;
-            document.getElementById(`votes-${candidateKey}`).innerText = `${votes[candidateKey]} vote${votes[candidateKey] !== 1 ? 's' : ''}`;
-            updateProgressBars();
+        window.resetVotes = function() {
+            if (confirm("Are you sure you want to reset all official tally boards?")) {
+                const freshVotes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
+                const freshCounts = { t1: 0, t2: 0 };
+                set(votesRef, freshVotes);
+                set(countsRef, freshCounts);
+            }
         }
 
         function updateProgressBars() {
-            // Deputy Head Boy calculations
-            let totalBoyVotes = votes.dhruv + votes.srijan;
-            if (totalBoyVotes > 0) {
-                document.getElementById('bar-dhruv').style.width = `${(votes.dhruv / totalBoyVotes) * 100}%`;
-                document.getElementById('bar-srijan').style.width = `${(votes.srijan / totalBoyVotes) * 100}%`;
-            } else {
-                document.getElementById('bar-dhruv').style.width = '0%';
-                document.getElementById('bar-srijan').style.width = '0%';
-            }
+            let totalBoyVotes = (localVotes.dhruv || 0) + (localVotes.srijan || 0);
+            document.getElementById('bar-dhruv').style.width = totalBoyVotes > 0 ? `${((localVotes.dhruv || 0) / totalBoyVotes) * 100}%` : '0%';
+            document.getElementById('bar-srijan').style.width = totalBoyVotes > 0 ? `${((localVotes.srijan || 0) / totalBoyVotes) * 100}%` : '0%';
 
-            // Deputy Head Girl calculations
-            let totalGirlVotes = votes.sanvi + votes.sravya;
-            if (totalGirlVotes > 0) {
-                document.getElementById('bar-sanvi').style.width = `${(votes.sanvi / totalGirlVotes) * 100}%`;
-                document.getElementById('bar-sravya').style.width = `${(votes.sravya / totalGirlVotes) * 100}%`;
-            } else {
-                document.getElementById('bar-sanvi').style.width = '0%';
-                document.getElementById('bar-sravya').style.width = '0%';
-            }
+            let totalGirlVotes = (localVotes.sanvi || 0) + (localVotes.sravya || 0);
+            document.getElementById('bar-sanvi').style.width = totalGirlVotes > 0 ? `${((localVotes.sanvi || 0) / totalGirlVotes) * 100}%` : '0%';
+            document.getElementById('bar-sravya').style.width = totalGirlVotes > 0 ? `${((localVotes.sravya || 0) / totalGirlVotes) * 100}%` : '0%';
         }
 
-        function resetVotes() {
-            votes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
-            for (let key in votes) {
-                document.getElementById(`votes-${key}`).innerText = `0 votes`;
-            }
-            updateProgressBars();
-        }
-
-        // Live Table Directory Search Filter
-        function searchDirectory() {
+        window.searchDirectory = function() {
             let input = document.getElementById("directorySearch");
             let filter = input.value.toUpperCase();
             let table = document.getElementById("committeeTable");
             let tr = table.getElementsByTagName("tr");
-
             for (let i = 1; i < tr.length; i++) {
                 let showRow = false;
                 let tds = tr[i].getElementsByTagName("td");
-                
                 for(let j = 0; j < tds.length; j++) {
                     if (tds[j]) {
                         let txtValue = tds[j].textContent || tds[j].innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            showRow = true;
-                            break;
-                        }
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) { showRow = true; break; }
                     }
                 }
                 tr[i].style.display = showRow ? "" : "none";
             }
         }
-    </script>
-<!-- ... Your existing HTML layouts, tables, and buttons are up here ... -->
 
-    <!-- PASTE THE CODE HERE -->
-    <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-  // 1. YOUR FIREBASE CONFIGURATION (Paste yours here)
- const firebaseConfig = {
-  apiKey: "YOUR_ACTUAL_API_KEY",
-  authDomain: "your-project.firebaseapp.com",
-  databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "..."
-  appId: "..."
-};
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // References to our data paths in the cloud
-  const votesRef = ref(db, 'election/votes');
-  const countsRef = ref(db, 'election/counts');
-
-  // Local state cache variables
-  let localVotes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
-  let localCounts = { t1: 0, t2: 0 };
-  const maximumSimulatedCap = 150;
-
-  // 2. LISTEN FOR LIVE CHANGES FROM THE CLOUD
-  // Whenever the database updates (on any device), this updates everyone's UI instantly.
-  onValue(votesRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      localVotes = data;
-      for (let key in localVotes) {
-        const element = document.getElementById(`votes-${key}`);
-        if (element) element.innerText = `${localVotes[key]} vote${localVotes[key] !== 1 ? 's' : ''}`;
-      }
-      updateProgressBars();
-    }
-  });
-
-  onValue(countsRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      localCounts = data;
-      document.getElementById('t1-count').innerText = `${localCounts.t1 || 0} Processed`;
-      document.getElementById('t2-count').innerText = `${localCounts.t2 || 0} Processed`;
-      
-      let flexTotal = (localCounts.t1 || 0) + (localCounts.t2 || 0);
-      document.getElementById('total-voters').innerText = `${flexTotal} Student${flexTotal > 1 ? 's' : ''}`;
-      
-      let visualPercentage = Math.min((flexTotal / maximumSimulatedCap) * 100, 100);
-      document.getElementById('voter-bar').style.width = `${visualPercentage}%`;
-    }
-  });
-
-  // 3. PUSH ACTIONS TO CLOUD DATABASE ON CLICK
-  // Expose local click triggers safely to HTML window context
-  window.addVote = function(candidateKey) {
-    localVotes[candidateKey] = (localVotes[candidateKey] || 0) + 1;
-    set(votesRef, localVotes); // Save directly to cloud
-  }
-
-  window.checkIn = function(tableKey) {
-    localCounts[tableKey] = (localCounts[tableKey] || 0) + 1;
-    set(countsRef, localCounts); // Save directly to cloud
-  }
-
-  window.resetVotes = function() {
-    if (confirm("Are you sure you want to reset all official tally boards?")) {
-      const freshVotes = { dhruv: 0, srijan: 0, sanvi: 0, sravya: 0 };
-      const freshCounts = { t1: 0, t2: 0 };
-      set(votesRef, freshVotes);
-      set(countsRef, freshCounts);
-    }
-  }
-
-  // UI rendering helper calculation functions
-  function updateProgressBars() {
-    let totalBoyVotes = (localVotes.dhruv || 0) + (localVotes.srijan || 0);
-    document.getElementById('bar-dhruv').style.width = totalBoyVotes > 0 ? `${((localVotes.dhruv || 0) / totalBoyVotes) * 100}%` : '0%';
-    document.getElementById('bar-srijan').style.width = totalBoyVotes > 0 ? `${((localVotes.srijan || 0) / totalBoyVotes) * 100}%` : '0%';
-
-    let totalGirlVotes = (localVotes.sanvi || 0) + (localVotes.sravya || 0);
-    document.getElementById('bar-sanvi').style.width = totalGirlVotes > 0 ? `${((localVotes.sanvi || 0) / totalGirlVotes) * 100}%` : '0%';
-    document.getElementById('bar-sravya').style.width = totalGirlVotes > 0 ? `${((localVotes.sravya || 0) / totalGirlVotes) * 100}%` : '0%';
-  }
-
-  // Keep search timeline functional locally
-  window.searchDirectory = function() {
-    let input = document.getElementById("directorySearch");
-    let filter = input.value.toUpperCase();
-    let table = document.getElementById("committeeTable");
-    let tr = table.getElementsByTagName("tr");
-    for (let i = 1; i < tr.length; i++) {
-        let showRow = false;
-        let tds = tr[i].getElementsByTagName("td");
-        for(let j = 0; j < tds.length; j++) {
-            if (tds[j]) {
-                let txtValue = tds[j].textContent || tds[j].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) { showRow = true; break; }
+        window.toggleTimeline = function(element) {
+            const dot = element.querySelector('.timeline-dot');
+            const card = element.querySelector('.timeline-card');
+            const badge = element.querySelector('.status-badge');
+            if (card.classList.contains('bg-emerald-50/60')) {
+                card.classList.remove('bg-emerald-50/60', 'border-emerald-200');
+                card.classList.add('bg-slate-50', 'border-slate-200/60');
+                dot.classList.remove('bg-emerald-600'); dot.classList.add('bg-teal-600');
+                if(badge.innerText === 'Completed') {
+                    badge.innerText = 'Upcoming';
+                    badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge";
+                }
+            } else {
+                card.classList.remove('bg-slate-50', 'border-slate-200/60');
+                card.classList.add('bg-emerald-50/60', 'border-emerald-200');
+                dot.classList.remove('bg-teal-600', 'bg-slate-300'); dot.classList.add('bg-emerald-600');
+                badge.innerText = 'Completed';
+                badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-medium w-max status-badge";
             }
         }
-        tr[i].style.display = showRow ? "" : "none";
-    }
-  }
-
-  window.toggleTimeline = function(element) {
-    const dot = element.querySelector('.timeline-dot');
-    const card = element.querySelector('.timeline-card');
-    const badge = element.querySelector('.status-badge');
-    if (card.classList.contains('bg-emerald-50/60')) {
-        card.classList.remove('bg-emerald-50/60', 'border-emerald-200');
-        card.classList.add('bg-slate-50', 'border-slate-200/60');
-        dot.classList.remove('bg-emerald-600'); dot.classList.add('bg-teal-600');
-        if(badge.innerText === 'Completed') {
-            badge.innerText = 'Upcoming';
-            badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium w-max status-badge";
-        }
-    } else {
-        card.classList.remove('bg-slate-50', 'border-slate-200/60');
-        card.classList.add('bg-emerald-50/60', 'border-emerald-200');
-        dot.classList.remove('bg-teal-600', 'bg-slate-300'); dot.classList.add('bg-emerald-600');
-        badge.innerText = 'Completed';
-        badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-medium w-max status-badge";
-    }
-  }
-</script>
+    </script>
 </body>
-</html></body>
 </html>
